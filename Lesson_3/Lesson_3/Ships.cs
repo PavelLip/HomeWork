@@ -8,7 +8,7 @@ namespace Lesson_3
 {
     class Ships
     {
-        
+        public static Random RandomPoint = new Random(DateTime.Now.Millisecond);
         /*
               public void CreateShips(int[,] Ships, int count)
               {
@@ -33,10 +33,10 @@ namespace Lesson_3
         {
             //Random RandomPoint = new Random.Seed();
 
-            Random RandomPoint = new Random(DateTime.Now.Millisecond);
+            //Random RandomPoint = new Random(DateTime.Now.Millisecond);
 
-            Ship[0, 0] = RandomPoint.Next (0, Ship.Length / 2);
-            Ship[0, 1] = RandomPoint.Next(0, Ship.Length / 2);
+            Ship[0, 0] = RandomPoint.Next (0, 9 - Ship.Length / 2);
+            Ship[0, 1] = RandomPoint.Next(0, 9 - Ship.Length / 2);
             int RightOrDown = RandomPoint.Next(0, 100);
 
             if (count < 4)

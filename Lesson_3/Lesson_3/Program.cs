@@ -10,6 +10,7 @@ namespace Lesson_3
     {
         static void Main(string[] args)
         {
+            
             ShowArrayElementsDiagonally();
             Console.WriteLine();
 
@@ -23,7 +24,7 @@ namespace Lesson_3
             int InsertNumber = Int32.Parse(Console.ReadLine());
             MethodShiftArray(InsertNumber);
             Console.ReadLine();
-
+            
             void MethodShiftArray(int x) 
                 // Знаю что можно написать проще через 2 цикла или базовый метод, но у нас был челендж с сокурсниками кто напишет через 1 цикл и без встроенных методов, доп массивов и рекурсий
             {
@@ -150,13 +151,10 @@ namespace Lesson_3
             }
 
             /*
-            Игра морской бой не работает
-            Хотел написать метод случайного распределения кораблей по полю, но пока не получается. 
-            Не правильный метод генерации координат кораблей
-            Не правильная проверка допустимости добавления нового корабля (новый добавляется поверх уже существующего)
-            Отсутствует проверка и запрет на расположения кораблей вплотную друг к другу 
+            Из-за непредсказуемости генерации кораблей код может зависать 
             */
-            //SeaBattle();
+
+            SeaBattle();
             void SeaBattle()
             {
                 char[,] Battlefield = new char[10, 10];
@@ -183,8 +181,8 @@ namespace Lesson_3
 
                 AddShipsOfBattelfild(FourDecShip, Battlefield, CountFourDecShip);
                 AddShipsOfBattelfild(ThreeDecShip, Battlefield, CountThreeDecShip);
-                //AddShipsOfBattelfild(TwoDecShip, Battlefield, CountTwoDecShip);
-                //AddShipsOfBattelfild(OneDecShip, Battlefield, CountOneDecShip);
+                AddShipsOfBattelfild(TwoDecShip, Battlefield, CountTwoDecShip);
+                AddShipsOfBattelfild(OneDecShip, Battlefield, CountOneDecShip);
 
 
                 ShowSeaBattle(Battlefield);
@@ -198,18 +196,19 @@ namespace Lesson_3
                     while (CrossingShips == false)
                     {
                         Ships.CreateShipsPoint(ArrayShips, Count);
-                        int zzz = 0;
-                        int xxx = 0;
-                        int yyy = 0;
 
-                        for (; zzz < 2; zzz++)
+                        for (int z = 0; z < ArrayShips.Length/2; z++)
                         {
-                            for (; xxx < 9; xxx++)
+                            for (int x = 0; x < 9; x++)
                             {
-                                for (; yyy < 9; yyy++)
+                                for (int y = 0; y < 9; y++)
                                 {
+                                    int x_ship = ArrayShips[z, 0];
+                                    int y_ship = ArrayShips[z, 1];
 
-                                    if (Battlefield[ArrayShips[zzz, 0], ArrayShips[zzz, 1]] == Battlefield[xxx, yyy] && Battlefield[xxx, yyy] == 'X')
+                                    //if ((Battlefield[x_ship, y_ship] == Battlefield[x, y]) && Battlefield[x, y] == 'X' || Battlefield[x, y] == '1')
+                                    if ((x_ship==x && y_ship==y) && (Battlefield[x, y] == 'X' || Battlefield[x, y] == '1'))
+
                                     {
                                         CrossingShips = false;
                                         test = 1;
@@ -221,6 +220,91 @@ namespace Lesson_3
                         if (test == 0)
                         {
                             CrossingShips = true;
+                            for (int i = 0; i < ArrayShips.Length / 2; i++)
+                            {
+                                int x = ArrayShips[i, 0];
+                                int y = ArrayShips[i, 1];
+
+                                if (x == 0 && y == 0) //левый верхний угол
+                                {
+                                    Battlefield[x + 1, y] = '1';
+                                    Battlefield[x, y + 1] = '1';
+                                    Battlefield[x + 1, y + 1] = '1';
+                                }
+                                else if (x == 9 && y == 0) //правый верхний угол
+                                {
+                                    Battlefield[x - 1, y] = '1';
+                                    Battlefield[x - 1, y + 1] = '1';
+                                    Battlefield[x, y + 1] = '1';
+                                }
+                                else if (x == 0 && y == 9) //левый нижний угол
+                                {
+                                    Battlefield[x + 1, y] = '1';
+                                    Battlefield[x - 1, y - 1] = '1';
+                                    Battlefield[x, y - 1] = '1';
+                                }
+                                else if (x == 9 && y == 9) //правый нижний угол
+                                {
+                                    Battlefield[x - 1, y - 1] = '1';
+                                    Battlefield[x, y - 1] = '1';
+                                    Battlefield[x - 1, y] = '1';
+                                }
+
+                                else if (y == 0 && x > 0 && x < 9) //верхняя граница
+                                {
+                                    Battlefield[x - 1, y] = '1';        //лево     
+                                    Battlefield[x + 1, y] = '1';        //право
+                                    Battlefield[x - 1, y + 1] = '1';    //низ -лево
+                                    Battlefield[x, y + 1] = '1';        //низ
+                                    Battlefield[x + 1, y + 1] = '1';    //низ-право
+                                }
+                                else if (y == 9 && x > 0 && x < 9) //нижняя граница
+                                {
+                                    Battlefield[x - 1, y - 1] = '1';    //верх-лево
+                                    Battlefield[x, y - 1] = '1';        //верх
+                                    Battlefield[x + 1, y - 1] = '1';    //верх-право
+                                    Battlefield[x - 1, y] = '1';        //лево
+                                    Battlefield[x + 1, y] = '1';        //право
+                                }
+
+                                else if (x == 0 && y > 0 && y < 9) //левая граница
+                                {
+                                    Battlefield[x, y - 1] = '1';        //верх
+                                    Battlefield[x, y + 1] = '1';        //низ
+                                    Battlefield[x + 1, y - 1] = '1';    //верх-право
+                                    Battlefield[x + 1, y] = '1';        //право
+                                    Battlefield[x + 1, y + 1] = '1';    //низ-право
+                                }
+
+                                else if (x == 9 && x > 0 && x < 9) //правая граница
+                                {
+                                    Battlefield[x, y - 1] = '1';        //верх
+                                    Battlefield[x, y + 1] = '1';        //низ
+                                    Battlefield[x - 1, y - 1] = '1';    //верх-лево
+                                    Battlefield[x - 1, y] = '1';        //лево
+                                    Battlefield[x - 1, y + 1] = '1';    //низ -лево
+                                }
+                                else
+                                {
+                                    Battlefield[x - 1, y - 1] = '1';    //верх-лево
+                                    Battlefield[x, y - 1] = '1';        //верх
+                                    Battlefield[x + 1, y - 1] = '1';    //верх-право
+                                    Battlefield[x - 1, y] = '1';        //лево
+                                                                        //Battlefield[x, y] = '1';      
+                                    Battlefield[x + 1, y] = '1';        //право
+                                    Battlefield[x - 1, y + 1] = '1';    //низ -лево
+                                    Battlefield[x, y + 1] = '1';        //низ
+                                    Battlefield[x + 1, y + 1] = '1';    //низ-право
+                                }
+
+
+                            }
+                            for (int i = 0; i < ArrayShips.Length / 2; i++)
+                            {
+                                int x = ArrayShips[i, 0];
+                                int y = ArrayShips[i, 1];
+                                Battlefield[x, y] = 'X';
+                            }
                         }
                         else
                         {
@@ -231,17 +315,11 @@ namespace Lesson_3
 
 
 
-                        for (int i = 0; i < ArrayShips.Length / 2; i++)
-                        {
-                            int x = ArrayShips[i, 0];
-                            int y = ArrayShips[i, 1];
-                            Battlefield[x, y] = 'X';
-                        }
+                        
+
 
                     }
                     //Ships.CreateShipsPoint(ArrayShips, Count);
-
-
                 }
             }
             void ShowSeaBattle(char[,] Battlefield)
@@ -250,7 +328,9 @@ namespace Lesson_3
                 {
                     for (int j = 0; j < 10; j++)
                     {
-                        Console.Write(Battlefield[i, j] + " ");
+                        if (Battlefield[i, j] == '1') Battlefield[i, j] = '.';
+
+                         Console.Write(Battlefield[i, j] + " ");
                     }
                     Console.WriteLine();
                 }

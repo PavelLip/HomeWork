@@ -11,51 +11,37 @@ namespace ConsoleApp1
 
         static void Main(string[] args)
         {
-            //Задание № 1
-            //Генерируются случайные ФИО из трех массивов расположенных в методе ShowConsoleFullName
-            //Колличество сгенерированных ФИО не ограниченно
-            Console.Write("Введите колличество ФИО которое будет отображено: ");
-            ShowConsoleFullName(Int32.Parse(Console.ReadLine()));
-            Console.ReadLine();
+            ////Задание № 1
+            ////Генерируются случайные ФИО из трех массивов расположенных в методе ShowConsoleFullName
+            ////Колличество сгенерированных ФИО не ограниченно
+            //Console.Write("Введите колличество ФИО которое будет отображено: ");
+            //ShowConsoleFullName(Int32.Parse(Console.ReadLine()));
+            //Console.ReadLine();
 
-            //Задание № 2
-            //Что то я перемудрил с бесполезным преобразованием строки в Char, если нужно переделаю) 
-            Console.WriteLine("Введите числа которые требуется сложить через пробел:");
-            Console.WriteLine($"Сумма всех введенных чисел = {SummEnteredNumbers(Console.ReadLine())}");
-            Console.ReadLine();
+            ////Задание № 2
+            ////Что то я перемудрил с бесполезным преобразованием строки в Char, если нужно переделаю) 
+            //Console.WriteLine("Введите числа которые требуется сложить через пробел:");
+            //Console.WriteLine($"Сумма всех введенных чисел = {SummEnteredNumbers(Console.ReadLine())}");
+            //Console.ReadLine();
 
-            //Задание № 3
-            Console.WriteLine("Введите номер месяца что бы узнать время года");
-            OutputMounth(int.Parse(Console.ReadLine()));
-            Console.ReadLine();
+            ////Задание № 3
+            //Console.WriteLine("Введите номер месяца что бы узнать время года");
+            //OutputMounth(int.Parse(Console.ReadLine()));
+            //Console.ReadLine();
 
             //Задание № 4
             Console.WriteLine("Введите порядковый номер числа Фибоначчи что бы узнать его значение");
             Console.WriteLine($"Значение числа Фибоначчи равняется: {FibonacciNumbers(int.Parse(Console.ReadLine()))}");
             Console.ReadLine();
 
-            //Задание № 5
-            // Последнее задание оказалось гараздо проще чем все остальные)))))
-            string str = "    Предложение один Теперь предложение два Предложение три";
-            for (int i = 0; i < str.Length; i++)
-            {
-                if (str[0] == ' ')
-                {
-                    str = str.Remove(0, 1);
-                }
-                else i = str.Length;
-            } // убираем лишние пробелы перед началом текста
-            for (int i = 1; i < str.Length; i++)
-            {
-                if (char.IsUpper(str[i]))
-                {
-                    str = str.Insert(i - 1, ",");
-                    i += 1;
-                }
-            }
-            Console.WriteLine(str);
-            Console.ReadLine();
+            ////Задание № 5
+            ////На вебинаре мы разбирали как сделать короче, но я захотел довести программу до конца по уже выбранному пути
+            ////Получилось очень много костылей и плохо читаемый код, но она работает.
+            //string str = "    Предложение         один    Теперь        предложение           два         Предложение         три         ";
+            //DotPlacment(str);
+            //Console.ReadLine();
         }
+        
 
         //Задание № 1
         public static void ShowConsoleFullName(int Count)
@@ -163,7 +149,7 @@ namespace ConsoleApp1
             int FirstNumbers = 0;
             int SecondNumbers = 1;
             int EndNumbers = FirstNumbers + SecondNumbers;
-            (FirstNumbers, SecondNumbers, EndNumbers) = FibonacciNumbers(NumberPosition, FirstNumbers, SecondNumbers, EndNumbers);
+            (FirstNumbers, SecondNumbers, EndNumbers) = FibonacciNumbers(NumberPosition+1, FirstNumbers, SecondNumbers, EndNumbers);
             return EndNumbers;
         }
         public static (int FirstNumbers, int SecondNumbers, int EndNumbers) FibonacciNumbers(int NumberPosition, int FirstNumbers, int SecondNumbers, int EndNumbers)
@@ -184,6 +170,55 @@ namespace ConsoleApp1
                 EndNumbers = FirstNumbers + SecondNumbers;
                 return (FirstNumbers, SecondNumbers, EndNumbers);
             }
+        }
+        //Задание № 5
+        public static void DotPlacment(string str)
+        {
+            int poiskProbelov = 0;
+            for (int i = 0; i < str.Length; i++)
+            {
+                int x = str.Length;
+                if (str[0] == ' ')
+                {
+                    str = str.Remove(0, 1);
+                }
+                else if (i == str.Length - 1 && str[str.Length - 1] == ' ')
+                {
+                    str = str.Remove(str.Length - 1, 1);
+                    i -= 2;
+                    poiskProbelov = 0;
+                }
+                else if (poiskProbelov == 2)
+                {
+                    str = str.Remove(i - 1, 1);
+                    poiskProbelov = 0;
+                    i -= 3;
+                }
+                else if (poiskProbelov < 2 && str[i] == ' ')
+                {
+                    poiskProbelov += 1;
+                }
+                else if (poiskProbelov == 1 && str[i] != ' ')
+                {
+                    poiskProbelov = 0;
+                }
+
+            } // убираем лишние пробелы перед началом текста
+
+            for (int i = 1; i < str.Length; i++)
+            {
+                if (char.IsUpper(str[i]))
+                {
+                    str = str.Insert(i - 1, ".");
+                    i += 1;
+                }
+                else if (i == str.Length - 1)
+                {
+                    str = str.Insert(i + 1, ".");
+                    i = str.Length + 1;
+                }
+            }
+            Console.WriteLine(str);
         }
     }
 }

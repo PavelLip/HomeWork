@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text;
-using InteractionUser;
+using Greeting;
+
 
 namespace Lesson_8
 {
@@ -12,8 +12,7 @@ namespace Lesson_8
         static void Main(string[] args)
         {
             Console.WriteLine("Введите свое имя");
-            Greating.HelloUser(Console.ReadLine());
-
+            InteractionUser.HelloUser(Console.ReadLine());
             Console.ReadLine();
         }
     }
